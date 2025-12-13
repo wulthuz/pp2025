@@ -86,7 +86,8 @@ while courseSelection in range(1, numOfCourses + 1):
     for k in range(numOfStudents):
         print(f"Mark for student {students[k].getName()}: ")
         value = int(input())
-        tempMarks.append(value)
+        tempMarks.append(Mark(value))
+
 
     selectedCourse.markList = tempMarks
 
@@ -117,7 +118,7 @@ while choices < 4:
             print("\tId".ljust(15, " "), "Name".ljust(20, " "), "Mark")
             for i in range(numOfStudents):
                 students[i].printNameAndId()
-                print(c.markList[i])
+                print(c.markList[i].getValue())
 
     else:
         break
