@@ -1,92 +1,95 @@
-import string
+# PRACTICAL WORK 1
 
 courses = []
 students = []
-marks = []
 
-# Input number of students in a class
-numOfStudents = int(input("How many students are there in a class ? \n"))
+# input students
+numOfStudents = int(input("How many students are there in a class? "))
 
-# Input student information: id, name, DoB
-for i in range(0, numOfStudents):
-    print(f"Student {i+1}'s informations: ")
-    id = int(input("Id: "))
+for i in range(numOfStudents):
+    print(f"Student {i + 1}'s information:")
+    sid = int(input("Id: "))
     name = input("Name: ")
-    dob = input("Dob (format: dd/mm/yy): ")
-    students.append({"id": id, "name": name, "Dob": dob})
+    dob = input("Dob (dd/mm/yy): ")
 
-    i += 1
+    students.append({
+        "id": sid,
+        "name": name,
+        "dob": dob
+    })
 
-# Input number of courses
-numOfCourses = int(input("How many courses are there ? \n"))
+# input courses 
+numOfCourses = int(input("\nHow many courses are there? "))
 
-# Input course information: id, name
-for j in range(0, numOfCourses):
-    print(f"Course {j+1}'s informations: ")
-    _id = int(input("Id: "))
-    _name = input("Name: ")
-    courses.append({"id": _id, "name": _name, "studentsList": students})
+for j in range(numOfCourses):
+    print(f"Course {j + 1}'s information:")
+    cid = int(input("Id: "))
+    cname = input("Name: ")
 
-    j += 1
+    courses.append({
+        "id": cid,
+        "name": cname,
+        "marks": {}   # key = student id, value = mark
+    })
 
-# Select a course, input marks for student in this course
-courseSelection = 1
-while courseSelection in range(1, numOfCourses + 1):
+# input marks
+while True:
     courseSelection = int(
-        input(
-            f"To enter marks for student, select a course (from 1 to {numOfCourses}, type 0 to quit): "
-        )
+        input(f"\nSelect a course (1–{numOfCourses}, 0 to quit): ")
     )
 
     if courseSelection == 0:
         break
 
-    for k in range(0, numOfStudents):
-        print(f"Mark for student {students[k]['name']}: ")
-        mark = int(input())
-        marks.append({students[k]["name"]: mark})
+    course = courses[courseSelection - 1]
 
-        k += 1
+    print(f"\nEntering marks for course: {course['name']}")
+    for student in students:
+        mark = int(input(f"Mark for {student['name']}: "))
+        course["marks"][student["id"]] = mark
 
-    courses[courseSelection - 1]["marks"] = marks[
-        (courseSelection - 1) * numOfStudents : courseSelection * numOfStudents
-    ]
-
-choices = 1
-
-# Listing functions
-while choices < 4:
-    choices = int(
+# menu
+while True:
+    choice = int(
         input(
-            "If you want to see courses list, please type 1, students list, type 2, student marks, type 3, another number to quit: "
+            "\n1. List courses\n"
+            "2. List students\n"
+            "3. Show student marks\n"
+            "Other number to quit\n"
+            "Your choice: "
         )
     )
 
-    # List courses
-    if choices == 1:
-        print("Id".ljust(5, " "), "Name")
-        for j in range(0, numOfCourses):
-            print(str(courses[j]["id"]).ljust(5, " "), courses[j]["name"])
-    # List students
-    elif choices == 2:
-        print("Id".ljust(5, " "), "Name".ljust(15, " "), "Dob")
-        for i in range(0, numOfStudents):
+    # list courses
+    if choice == 1:
+        print("\nId".ljust(6), "Name")
+        for c in courses:
+            print(str(c["id"]).ljust(6), c["name"])
+
+    # list students
+    elif choice == 2:
+        print("\nId".ljust(6), "Name".ljust(15), "Dob")
+        for s in students:
             print(
-                str(students[i]["id"]).ljust(5, " "),
-                students[i]["name"].ljust(15, " "),
-                students[i]["Dob"],
+                str(s["id"]).ljust(6),
+                s["name"].ljust(15),
+                s["dob"]
             )
-    # Show student marks for a given course
-    elif choices == 3:
-        for j in range(0, numOfCourses):
-            print(courses[j]["name"])
-            print("\tId".ljust(5, " "), "Name".ljust(15, " "), "Mark")
-            for i in range(0, numOfStudents):
+
+    # show marks
+    elif choice == 3:
+        for c in courses:
+            print(f"\nCourse: {c['name']}")
+            print("\tId".ljust(6), "Name".ljust(15), "Mark")
+
+            for s in students:
+                mark = c["marks"].get(s["id"], "N/A")
                 print(
                     "\t",
-                    str(students[i]["id"]).ljust(5, " "),
-                    students[i]["name"].ljust(15, " "),
-                    courses[j]["marks"][i][students[i]["name"]],
+                    str(s["id"]).ljust(6),
+                    s["name"].ljust(15),
+                    mark
                 )
+
     else:
         break
